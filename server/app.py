@@ -11,10 +11,38 @@ augmenter = pickle.load(open('../final-model/augmenter.pkl','rb'))
 scaler = pickle.load(open('../final-model/scaler.pkl','rb'))
 imputer = pickle.load(open('../final-model/imputer.pkl','rb'))
 
+html_mapping_fields = {
+    "age": "Age",
+    "presenting-problem": "Presenting problem",
+    "heart-rate": "Heart rate",
+    "temperature": "Temperature",
+    "oxygen-saturation": "Oxygen saturation",
+    "respiratory-rate": "Respiratory rate",
+    "1": "Dyspnea",
+    "2": "Ear, nose, throat",
+    "3": "Fever without source",
+    "4": "Gastro-intestinal",
+    "5": "Neurological",
+    "6": "Rash",
+    "7": "Trauma",
+    "8": "Urinary tract problems",
+    "9": "Wounds",
+    "10": "Other problems"
+}
+
+def update_dict_keys(data):
+    d = {}
+    for k, v in data.items():
+        if k == 'presenting-problem':
+            v = html_mapping_fields[v[0]]
+        d[html_mapping_fields[k]] = v
+    return d
+
 @app.route('/', methods=['POST'])
 def hello():
-    data = request.get_json(force=True)
-    data = pd.DataFrame.from_dict(data)
+    data = request.form.to_dict(flat=False)
+    _dict = update_dict_keys(data)
+    data = pd.DataFrame.from_dict(_dict)
 
     presenting_problem = data['Presenting problem']
     pp_f = 'Presenting problem_'+presenting_problem.values[0]
@@ -41,7 +69,7 @@ def hello():
     x, _ = impute(x, imputer)
 
     # =================== SELECT ROWS ===========================
-    x, filtered_columns = select_rows(x, columns)
+    x, _ = select_rows(x, columns)
 
     # =================== PREDICT ===================
     prediction = model.predict(x)
@@ -151,6 +179,5 @@ interaction_cols = [
        'Age_Oxygen saturation', 'Respiratory rate_Heart rate',
        'Respiratory rate_Temperature', 'Respiratory rate_Oxygen saturation',
        'Heart rate_Temperature', 'Heart rate_Oxygen saturation',
-       'Temperature_Oxygen saturation']
-
-
+       'Temperature_Oxygen saturation'
+]
