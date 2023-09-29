@@ -12,47 +12,53 @@
   </head>
   <body>
     <div class="container">
-		<h1>Classificação de Risco</h1>
+		<h1 class="mt-4">Risk Classification</h1>
 
 		<form action="http://127.0.0.1:5000/" method="POST" role="form" class="form-horizontal">
+			{% if risk %}
+				<div class="alert alert-{{ risk }}" role="alert">
+					{{ message }}
+				</div>
+			{% endif %}
+
 			<div class="form-group">
-				<label for="age">Idade</label>
+				<label for="age">Age</label>
 				<input name="age" step="0.01" type="number" class="form-control" id="age">
 			</div>
 
 			<div class="form-group">
-				<label for="presenting-problem">Problema apresentado</label>
+				<label for="presenting-problem">Presenting problem</label>
 				<select name="presenting-problem" class="custom-select">
-					<option value="1">Dispnéia</option>
-					<option value="2">Ouvido, nariz, garganta</option>
-					<option value="3">Febre sem motivo</option>
-					<option value="4">Gastrointestinal</option>
-					<option value="5">Neurológico</option>
-					<option value="6">Irritação na pele</option>
+					<option value="1">Dyspnea</option>
+					<option value="2">Ear, nose, throat</option>
+					<option value="3">Fever without source</option>
+					<option value="4">Gastro-intestinal</option>
+					<option value="5">Neurological</option>
+					<option value="6">Rash</option>
 					<option value="7">Trauma</option>
-					<option value="8">Problemas do trato urinário</option>
-					<option value="9">Ferimentos</option>
-					<option selected value="10">Outros problemas</option>
+					<option value="8">Urinary tract problems</option>
+					<option value="9">Wounds</option>
+					<option selected value="10">Other problems</option>
 				</select>
 			</div>
 
 			<div class="form-group">
-				<label for="heart-rate">Frequência cardíaca</label>
+				<label for="heart-rate">Heart rate</label>
 				<input name="heart-rate" step="0.01" type="number" class="form-control" id="heart-rate">
 			</div>
 
 			<div class="form-group">
-				<label for="temperature">Temperatura</label>
+				<label for="temperature">Temperature</label>
 				<input name="temperature" step="0.01" type="number" class="form-control" id="temperature">
 			</div>
 
 			<div class="form-group">
-				<label for="oxygen-saturation">Saturação de oxigênio</label>
+				<label for="oxygen-saturation">Oxygen saturation</label>
 				<input name="oxygen-saturation" step="0.01" type="number" class="form-control" id="oxygen-saturation">
 			</div>
 
 			<div class="form-group">
-				<label for="respiratory-rate">Frequência respiratória</label>
+				<label for="respiratory-rate">Respiratory rate</label>
 				<input name="respiratory-rate" step="0.01" type="number" class="form-control" id="respiratory-rate">
 			</div>
 
@@ -67,4 +73,26 @@
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
   </body>
+  <style>
+	.alert-0 {
+		background-color: rgb(3, 127, 215);
+		color: white;
+	}
+	.alert-1 {
+		background-color: green;
+		color: white;
+	}
+	.alert-2 {
+		background-color: rgb(244, 221, 7);
+		color: black;
+	}
+	.alert-3 {
+		background-color: orange;
+		color: black;
+	}
+	.alert-4 {
+		background-color: red;
+		color: white;
+	}
+  </style>
 </html>

@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, render_template, redirect, url_for
 import numpy as np
 import pickle
 import pandas as pd
@@ -30,6 +30,14 @@ html_mapping_fields = {
     "10": "Other problems"
 }
 
+alert_messages = {
+    '4': 'Emergent Risk',
+    '3': 'Very Urgent Risk',
+    '2': 'Urgent Risk',
+    '1': 'Non Urgent Risk',
+    '0': 'Standard Risk'
+}
+
 def update_dict_keys(data):
     d = {}
     for k, v in data.items():
@@ -37,6 +45,13 @@ def update_dict_keys(data):
             v = html_mapping_fields[v[0]]
         d[html_mapping_fields[k]] = v
     return d
+
+@app.route('/patient', methods=['GET'])
+def patient():
+    args = request.args.to_dict()
+    if args:
+        return render_template('index.html', risk=args['risk'], message=args['message'])
+    return render_template('index.html')
 
 @app.route('/', methods=['POST'])
 def hello():
@@ -74,8 +89,12 @@ def hello():
     # =================== PREDICT ===================
     prediction = model.predict(x)
 
-    return str(prediction)
-
+    #return str(prediction)
+    return redirect(url_for(
+        'patient',
+        risk=str(prediction[0]),
+        message=alert_messages[str(prediction[0])]
+    ))
 
 # ================================
 
